@@ -1,15 +1,21 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 
 export default class UserListFrom extends Component{
     render() {
-        const {onInputChanged, onFormSubmitted, onFormRestored} = this.props;
+        const {userFormSearchValue, onInputChanged, onFormSubmitted, onFormRestored} = this.props;
         return (
             <div>
-            <input type="text" onChange={onInputChanged} />
-            <input type="button" value="submit" onClick={onFormSubmitted} />
+            <input type="text" onChange={onInputChanged} value={userFormSearchValue} />
             <input type="button" value="reset" onClick={onFormRestored} />
             </div>
         );
     }
 }
 
+UserListFrom.propTypes = {
+    userFormSearchValue: PropTypes.string,
+    onInputChanged: PropTypes.func,
+    onFormSubmitted: PropTypes.func,
+    onFormRestored: PropTypes.func
+};

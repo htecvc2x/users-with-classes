@@ -9,40 +9,69 @@ export default class App extends Component {
         super(props);
 
         this.state = {
-            users: [
-                {id: 1, name : 'name1', username : 'username1', email: 'email1'},
-                {id: 2, name : 'name2', username : 'username2', email: 'email2'},
-                {id: 3, name : 'name3', username : 'username3', email: 'email3'},
-                {id: 4, name : 'name4', username : 'username4', email: 'email4'},
-                {id: 5, name : 'name5', username : 'username5', email: 'email5'},
-            ],
+            users: [],
             userFormSearchValue : ''
         };
 
         this.baseState = this.state ;
     }
 
+    componentDidMount() {
+        this.loadUser();
+    }
+
+    loadUser = () => {
+        fetch('https://jsonplaceholder.typicode.com/users')
+            .then(response => response.json())
+            .then(json => {
+                this.baseState.users = json;
+                this.setState(state => {
+                    return {
+                        users: json
+                    }
+                });
+            })
+    }
+
 
     onInputChanged = (e) => {
-        this.setState({
-            userFormSearchValue : e.target.value
+        const v = e.target.value;
+        const self = this;
+        this.setState(state => {
+            return {
+                userFormSearchValue : v
+            }
+        }, () => {
+            self.onFormSubmitted();
         });
-        this.onFormRestored();
+
     }
 
     onFormSubmitted = () => {
-        const v =  this.state.userFormSearchValue;
+        let v =  this.state.userFormSearchValue;
         if (v) {
-            const users = [...this.state.users]
+            v = v.toLowerCase();
+            const users = [...this.baseState.users]
             const a = users.filter((user) => {
-                return user.name.indexOf(v) + 1;
+                return user.name.toLowerCase().indexOf(v) + 1;
             }); 
-            this.setState({users: a});
+            this.setState(state => {
+                return {
+                    users: a
+                }
+            });
         }
     }
 
     onFormRestored = () => {
-        this.setState({users: this.baseState.users});
+        this.setState(state => {
+            return {
+                users : this.baseState.users,
+                userFormSearchValue : ''
+            }
+        }, () => {
+            this.onFormSubmitted();
+        });
     }
 
     render() {

@@ -1,16 +1,12 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 
 import User from '../user';
 
 export default class UserList extends Component{
 
-    constructor() {
-        super();
-    }
-
     render() {
         const {users} = this.props;
-        //console.log(items);
         const elements = users.map((user) => {
             const {id, ...rest} = user;
             return (
@@ -28,3 +24,7 @@ export default class UserList extends Component{
         );
     }
 }
+
+UserList.propTypes = {
+    users: PropTypes.array,
+};
